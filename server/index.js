@@ -9,7 +9,7 @@ const client = require('twilio')(accountSid, authToken);
 const sendSMS = async (body) => {
     let messageOptions = {
         from: process.env.TWILIO_FROM_NUMBER,
-        to: '+917385487171',
+        to: '+919925275684',
         body: "Hello from node"
     }
     try {
@@ -20,8 +20,9 @@ const sendSMS = async (body) => {
     }
 }
 
+
 app.get('/', (req, res) => {
-    sendSMS();
+    // sendSMS();
     res.send('Message send')
 })
 
