@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/users');
 
 const getAllUsers = async (req, res) => {
     try {
@@ -29,7 +29,7 @@ const register = async (req, res) => {
         return res.status(201).send({ message: "User registered successfully" });
     } catch (error) {
         console.log(error);
-        res.status(500).send("Unable to register user");
+        res.status(500).send(error);
     }
 };
 

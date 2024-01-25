@@ -1,9 +1,17 @@
 import './App.css';
+import Signup from './pages/Signup';
+import { Toaster } from 'react-hot-toast';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello from App</h1>
+      <Toaster />
+      <Router>
+        <Routes>
+          <Route path='/' element={<Signup />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
