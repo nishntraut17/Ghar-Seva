@@ -2,27 +2,17 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+// import OnlyLogoTransparent from '../../assets/OnlyLogoTransparent.png';import PageLoading from '../../components/PageLoading';
 
 export default function Signup() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState('Consumer');
 
     const [formDetails, setFormDetails] = useState({
         name: "",
         email: "",
         password: "",
-        role: "",
     });
-
-    const categoryOptions = [
-        'Consumer',
-        'Service Provider',
-    ];
-
-    const handleCategoryChange = (event) => {
-        setSelectedCategory(event.target.value);
-    }
 
     const inputChange = (e) => {
         const { name, value } = e.target;
@@ -45,7 +35,7 @@ export default function Signup() {
 
             await toast.promise(
                 axios.post("http://localhost:5000/api/user/register", {
-                    name: "nishant", email: "nishant@gmail.com", password: "123"
+                    name, email, password
                 }),
                 {
                     success: "SignUp successfully",
@@ -71,18 +61,17 @@ export default function Signup() {
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         className="mx-auto h-10 w-auto"
+                        src=""
                         alt="Your Company"
                     />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Create Account
+                        Sign up to your account
                     </h2>
                 </div>
-
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" onSubmit={formSubmit}>
                         <div>
-
 
                             <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Full Name
@@ -99,15 +88,6 @@ export default function Signup() {
                                 />
                             </div>
                         </div>
-
-                        <select id="categoryFilter" value={selectedCategory} onChange={handleCategoryChange} className='block w-full rounded-md border-0 py-2 my-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'>
-                            <option value="">Select type of user</option>
-                            {categoryOptions.map((category, index) => (
-                                <option key={index} value={category}>
-                                    {category}
-                                </option>
-                            ))}
-                        </select>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                 Email address

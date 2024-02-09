@@ -5,25 +5,9 @@ const stripeRouter = require('./routes/stripe');
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
+require("./db/conn");
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
-
-const sendSMS = async (body) => {
-    let messageOptions = {
-        from: process.env.TWILIO_FROM_NUMBER,
-        to: '+919925275684',
-        body: "Hello from node"
-    }
-    try {
-        const message = await client.messages.create(messageOptions);
-        console.log(message);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
+app.use(express.json());
 app.use(cors({
     origin: ['http://localhost:3000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

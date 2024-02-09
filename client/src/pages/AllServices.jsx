@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Card from "../../components/Card"
+import Card from "../components/Card"
 
 const AllServices = () => {
     const [services, setServices] = useState([]);
@@ -55,10 +55,10 @@ const AllServices = () => {
                 </div>
 
 
-                <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                <div className="flex flex-row gap-20 m-10">
                     {filteredData.length ? filteredData.map((service, id) => (
                         <Link to={`/service/${service._id}`} id={id}>
-                            <Card name={service.name} image={service.serviceImages[0]} price={service.price} />
+                            <Card name={service.name} image={service.images[0]} id={service._id} />
                         </Link>
                     )) : <p>No Data...</p>}
                 </div>
