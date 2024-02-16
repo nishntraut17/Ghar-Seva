@@ -15,6 +15,9 @@ const userSchema = mongoose.Schema({
     address: {
         type: String,
     },
+    city: {
+        type: String,
+    },
     password: {
         type: String, required: true
     },
@@ -26,6 +29,10 @@ const userSchema = mongoose.Schema({
         type: String,
         default: 'consumer',
     },
+    experience: {
+        type: Number,
+        default: 1,
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);

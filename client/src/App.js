@@ -21,7 +21,7 @@ function App() {
             <Route path='/service/addservice' element={<AddService />} />
             <Route path='/services' element={<AllServices />} />
             <Route path='/service/:id' element={<SingleService />} />
-            <Route path='/service-provider' element={<BecomeServiceProvider />} />
+            <Route path='/service/provide-a-service' element={<BecomeServiceProvider />} />
           </Route>
           <Route path='/auth/signup' element={<Signup />} />
           <Route path='/auth/login' element={<Login />} />
