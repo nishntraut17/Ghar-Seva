@@ -3,7 +3,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import toast from 'react-hot-toast';
 
-const BecomeServiceProvider = () => {
+const ProvideAService = () => {
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedService, setSelectedService] = useState("");
@@ -81,4 +81,4 @@ const BecomeServiceProvider = () => {
     )
 }
 
-export default BecomeServiceProvider
+export default ProvideAService

@@ -32,7 +32,28 @@ const userSchema = mongoose.Schema({
     experience: {
         type: Number,
         default: 1,
-    }
+    },
+    ratings: [
+        {
+            customer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+            rating: { type: Number },
+        },
+    ],
+    comments: [
+        {
+            customer: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+            review: {
+                type: String,
+            },
+            date: {
+                type: Date,
+                default: Date.now(),
+            },
+        },
+    ],
 });
 
 module.exports = mongoose.model('User', userSchema);

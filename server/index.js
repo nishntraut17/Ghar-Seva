@@ -2,6 +2,7 @@ const express = require('express');
 const serviceRouter = require('./routes/service');
 const userRouter = require('./routes/users');
 const stripeRouter = require('./routes/stripe');
+const orderRouter = require('./routes/order');
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
@@ -17,6 +18,7 @@ app.use(cors({
 app.use('/api/user', userRouter);
 app.use('/api/service', serviceRouter);
 app.use('/api/stripe', stripeRouter);
+app.use('/api/order', orderRouter);
 
 app.get('/', (req, res) => {
     // sendSMS();

@@ -12,7 +12,9 @@ function AddService() {
     const [formDetails, setFormDetails] = useState({
         name: "",
         description: "",
+        subServices: [],
     });
+    const [service, setService] = useState("");
 
     const handleImageChange = (elements) => {
         const newPreviews = Array.from(elements).map(element => {
@@ -28,6 +30,16 @@ function AddService() {
         Promise.all(newPreviews).then((previews) => {
             setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]);
         });
+    };
+
+    const addSubServices = () => {
+        if (!service) {
+            return toast.error("Sub service cannot be empty");
+        }
+        const updatedFormDetails = { ...formDetails };
+        updatedFormDetails.subServices.push(service);
+        setFormDetails(updatedFormDetails);
+        setService("");
     };
 
     const inputChange = (e) => {
@@ -75,13 +87,14 @@ function AddService() {
             if (loading) return;
             if (files.length === 0) return;
 
-            const { name, description } = formDetails;
+            const { name, description, subServices } = formDetails;
             console.log(formDetails);
             const response = await toast.promise(
                 axios.post('http://localhost:5000/api/service', {
                     name,
                     description,
                     images: files,
+                    subServices: subServices
                 }, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
@@ -117,6 +130,33 @@ function AddService() {
                     />
 
                 </div>
+
+                <div className="flex gap-1">
+                    <label>Add services</label>
+                    <input
+                        type="text"
+                        onChange={(e) => setService(e.target.value)}
+                        value={service}
+                        name="service"
+                        placeholder="service"
+                        className="p-1.5 border bg-gray-100 rounded focus:outline outline-primary"
+                    />
+                    <button
+                        className="rounded bg-blue-50 text-sm px-4 py-1"
+                        onClick={addSubServices}
+                    >Add</button>
+                </div>
+                <p className="flex flex-col gap-2 w-32">
+                    {formDetails.subServices.map((ele) => (
+                        <p
+                            className="rounded p-2 gap-2 hover:z-10 hover:shadow-md"
+                            key={ele}
+                        >
+                            {ele}
+                        </p>
+                    ))}
+                </p>
+
                 <div className="flex flex-col gap-4 w-96 text-left">
 
                     <label>Enter Description:</label>

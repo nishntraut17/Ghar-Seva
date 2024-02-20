@@ -40,9 +40,9 @@ const AllServices = () => {
 
     return (
         <div className="">
-            <div className="mx-auto max-w-2xl px-4 sm:px-6  lg:max-w-7xl lg:px-8">
+            <div className="">
                 <h2 className="text-2xl font-bold tracking-tight text-gray-900 py-4">All services</h2>
-                <div className='flex flex-row items-center gap-8 justify-center'>
+                <div className='flex flex-col items-center gap-8 justify-center'>
                     <div className="rounded-xl w-96">
                         <input
                             type="text"
@@ -55,10 +55,10 @@ const AllServices = () => {
                 </div>
 
 
-                <div className="flex flex-row gap-20 m-10">
+                <div className="flex flex-col gap-20 m-10">
                     {filteredData.length ? filteredData.map((service, id) => (
                         <Link to={`/service/${service._id}`} id={id}>
-                            <Card name={service.name} image={service.images[0]} id={service._id} />
+                            <Card name={service.name} image={service.images[0]} id={service._id} description={service.description} />
                         </Link>
                     )) : <p>No Data...</p>}
                 </div>

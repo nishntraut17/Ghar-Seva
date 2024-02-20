@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const orderSchema = mongoose.Schema({
     status: {
         type: String,
-        enum: ['pending', 'complete', 'cancelled'],
-        default: 'pending',
+        default: 'user requests',
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -29,7 +28,14 @@ const orderSchema = mongoose.Schema({
     disableReview: {
         type: Boolean,
         default: false,
-    }
+    },
+    fees: {
+        type: Number,
+        default: 0,
+    },
+    subServices: [{
+        type: String
+    }]
 })
 
 module.exports = mongoose.model('Order', orderSchema);

@@ -10,7 +10,7 @@ const serviceSchema = mongoose.Schema({
     images: [{
         type: String,
     }],
-
+    subServices: [{ type: String }],
     serviceProviders: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

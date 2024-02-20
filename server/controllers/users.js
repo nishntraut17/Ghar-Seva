@@ -110,4 +110,45 @@ const getUser = async (req, res) => {
     }
 }
 
-module.exports = { register, login, getAllUsers, updateUser, deleteUser, getUser };
+const reviewUser = async (req, res) => {
+    try {
+        const { review } = req.body;
+        console.log(review);
+        if (!review) {
+            return res.status(400).json({ error: "Review is required." });
+        }
+
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        user.reviews.push({ customer: req.user, review });
+        await user.save();
+
+        res.status(201).json({ message: "Review added successfully." });
+    } catch (error) {
+        res.send(error);
+    }
+}
+
+const rateUser = async (req, res) => {
+    try {
+        const { rating } = req.body;
+
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        console.log(req.user);
+        user.ratings.push({ customer: req.user, rating: rating });
+        await user.save();
+
+        res.status(201).json({ message: "Rating added successfully." });
+    } catch (error) {
+        res.send(error);
+    }
+}
+
+module.exports = { register, login, getAllUsers, updateUser, deleteUser, getUser, reviewUser, rateUser };

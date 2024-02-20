@@ -33,7 +33,7 @@ const Header = () => {
                         </li>
                         <li>
                             <NavLink
-                                to={"/services"}
+                                to={"/service"}
                                 className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
                             >
                                 All Services
@@ -42,7 +42,7 @@ const Header = () => {
                         {token && (
                             <li>
                                 <NavLink
-                                    to={"/history"}
+                                    to={"/service/service-providers"}
                                     className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
                                 >
                                     Service Providers
@@ -52,20 +52,20 @@ const Header = () => {
                         {token && (
                             <li>
                                 <NavLink
-                                    to={"/history"}
+                                    to={"/order/service-provider-orders"}
                                     className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
                                 >
-                                    Contact Us
+                                    Orders (service provider)
                                 </NavLink>
                             </li>
                         )}
-                        {token && user.role === 'consumer' && (
+                        {token && (
                             <li>
                                 <NavLink
-                                    to={"/service-provider"}
+                                    to={"/order/user-orders"}
                                     className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
                                 >
-                                    Become a Service Provider
+                                    Orders (user)
                                 </NavLink>
                             </li>
                         )}
