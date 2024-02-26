@@ -55,13 +55,14 @@ const AllServices = () => {
                 </div>
 
 
-                <div className="flex flex-col gap-20 m-10">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8 m-10">
                     {filteredData.length ? filteredData.map((service, id) => (
-                        <Link to={`/service/${service._id}`} id={id}>
+                        <Link to={`/service/${service._id}`} id={id} key={id}>
                             <Card name={service.name} image={service.images[0]} id={service._id} description={service.description} />
                         </Link>
                     )) : <p>No Data...</p>}
                 </div>
+
             </div>
         </div>
     )

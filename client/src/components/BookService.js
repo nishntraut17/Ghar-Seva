@@ -3,11 +3,10 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { IoMdClose } from "react-icons/io";
 
-const BookAppointment = ({ setModalOpen, selectedServiceProvider, setSelectedServiceProvider, service, subServices }) => {
+const BookService = ({ setModalOpen, service, selectedSubServices }) => {
     const [formDetails, setFormDetails] = useState({
         date: "",
         time: "",
-        selectedSubServices: [],
     });
 
     const inputChange = (e) => {
@@ -18,29 +17,13 @@ const BookAppointment = ({ setModalOpen, selectedServiceProvider, setSelectedSer
         });
     };
 
-    const handleSubServiceSelection = (e) => {
-        const { value, checked } = e.target;
-        if (checked) {
-            setFormDetails(prevState => ({
-                ...prevState,
-                selectedSubServices: [...prevState.selectedSubServices, value],
-            }));
-        } else {
-            setFormDetails(prevState => ({
-                ...prevState,
-                selectedSubServices: prevState.selectedSubServices.filter(subService => subService !== value),
-            }));
-        }
-    };
-
-    const bookAppointment = async (e) => {
+    const bookService = async (e) => {
         e.preventDefault();
         console.log({
             date: formDetails.date,
             time: formDetails.time,
-            serviceProvider: selectedServiceProvider,
             service: service,
-            subServices: formDetails.selectedSubServices
+            subServices: selectedSubServices
         });
         console.log(localStorage.getItem("token"));
         try {
@@ -50,9 +33,8 @@ const BookAppointment = ({ setModalOpen, selectedServiceProvider, setSelectedSer
                     {
                         date: formDetails.date,
                         time: formDetails.time,
-                        serviceProvider: selectedServiceProvider,
                         service: service,
-                        subServices: formDetails.selectedSubServices
+                        subServices: selectedSubServices
                     },
                     {
                         headers: {
@@ -61,13 +43,12 @@ const BookAppointment = ({ setModalOpen, selectedServiceProvider, setSelectedSer
                     }
                 ),
                 {
-                    success: "Appointment booked successfully",
-                    error: "Unable to book appointment",
-                    loading: "Booking appointment...",
+                    success: "Service booked successfully",
+                    error: "Unable to book Service",
+                    loading: "Booking Service...",
                 }
             );
             setModalOpen(false);
-            setSelectedServiceProvider(null);
         } catch (error) {
             return error;
         }
@@ -84,7 +65,7 @@ const BookAppointment = ({ setModalOpen, selectedServiceProvider, setSelectedSer
                         className="cursor-pointer text-gray-500 hover:text-gray-700"
                     />
                 </div>
-                <h2 className="text-2xl font-semibold mb-6">Book Appointment</h2>
+                <h2 className="text-2xl font-semibold mb-6">Book Service</h2>
                 <form className="mb-4">
                     <div className="flex flex-col mb-4">
                         <label htmlFor="date" className="text-gray-600 mb-1">Date</label>
@@ -108,25 +89,11 @@ const BookAppointment = ({ setModalOpen, selectedServiceProvider, setSelectedSer
                             onChange={inputChange}
                         />
                     </div>
-                    <div className="mb-4">
-                        {subServices.map(subService => (
-                            <label key={subService} className="inline-flex items-center text-gray-700">
-                                <input
-                                    type="checkbox"
-                                    name={subService}
-                                    value={subService}
-                                    onChange={handleSubServiceSelection}
-                                    checked={formDetails.selectedSubServices.includes(subService)}
-                                    className="mr-2"
-                                />
-                                <span>{subService}</span>
-                            </label>
-                        ))}
-                    </div>
+
                     <button
                         type="submit"
                         className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-                        onClick={bookAppointment}
+                        onClick={bookService}
                     >
                         Book
                     </button>
@@ -137,4 +104,4 @@ const BookAppointment = ({ setModalOpen, selectedServiceProvider, setSelectedSer
 
 };
 
-export default BookAppointment;
+export default BookService;

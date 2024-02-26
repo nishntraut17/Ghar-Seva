@@ -65,14 +65,20 @@ const ProvideAService = () => {
     return (
         <div>
             <div className='text-xl font-bold m-5'>Choose service</div>
-            <div className='flex flex-col items-center gap-2'>
+            <div className='flex flex-row items-center gap-2 mx-20'>
                 {services.length && services.map((service) => (
                     <button
                         onClick={() => setSelectedService(service._id)}
-                        className={`flex border-2 border-blue-800 rounded-md bg-blue-500 gap-2 p-1 hover:scale-105 ${selectedService === service._id ? 'bg-blue-700' : ''}`}
+                        className={`flex border-2 border-gray-400 rounded-md bg-gray-300 gap-2 p-1 hover:scale-105 ${selectedService === service._id ? 'bg-slate-400' : ''}`}
                         key={service._id}
                     >
-                        {service.name}
+                        <div>
+                            <div className='h-32 w-32'>
+                                <img src={service.images[0]} alt="service" />
+                            </div>
+                            <span>{service.name}</span>
+                        </div>
+
                     </button>
                 ))}
             </div>

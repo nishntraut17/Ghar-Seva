@@ -29,17 +29,7 @@ const userSchema = mongoose.Schema({
         type: String,
         default: 'consumer',
     },
-    experience: {
-        type: Number,
-        default: 1,
-    },
-    ratings: [
-        {
-            customer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-            rating: { type: Number },
-        },
-    ],
-    comments: [
+    testimonials: [
         {
             customer: {
                 type: mongoose.Schema.Types.ObjectId,
@@ -48,12 +38,27 @@ const userSchema = mongoose.Schema({
             review: {
                 type: String,
             },
+            rating: { type: Number },
             date: {
                 type: Date,
                 default: Date.now(),
             },
+            order: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Order"
+            }
         },
     ],
+    services: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Service"
+        }
+    ],
+    isVerified: {
+        type: Boolean, default: false,
+    },
+    emailToken: { type: String },
 });
 
 module.exports = mongoose.model('User', userSchema);

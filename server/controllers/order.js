@@ -1,20 +1,64 @@
+const nodemailer = require('nodemailer');
+
 const Order = require('../models/order');
+const User = require('../models/users');
+const Service = require('../models/service');
 
 const createOrder = async (req, res) => {
     try {
         console.log(req.body);
-        const order = await Order({ ...req.body, user: req.user });
-        await order.save();
-        res.send(order);
+        const service = await Service.findById(req.body.service);
+
+        // Check if service exists
+        if (!service) {
+            return res.status(404).send('Service not found');
+        }
+
+        const orders = await Promise.all(service.serviceProviders.map(async (providerId) => {
+            const order = new Order({ ...req.body, serviceProvider: providerId, user: req.user._id });
+            await order.save();
+
+            const serviceProvider = await User.findById(providerId);
+
+            const transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: "nishantraut90@gmail.com",
+                    pass: process.env.EMAIL_PASS,
+                },
+            })
+
+            const mailOptions = {
+                from: '"Gharseva Admin" <nishantraut90@gmail.com>',
+                to: serviceProvider.email,
+                subject: "New Order",
+                html: `<p>Hello ${serviceProvider.name},</p> <br/>
+                <span>There is a new order for ${service.name}</span> <br/>
+                <span>Please Login to your account and go to order -> new order section to view more details.</span>`
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log("Email Sent to all Service Providers");
+                }
+            });
+
+            return order;
+        }));
+
+        res.send(orders);
     } catch (error) {
-        console.log(error);
-        res.send(error);
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
 }
 
+
 const getServiceProviderOrder = async (req, res) => {
     try {
-        const user = req.user;
+        const user = req.user._id;
         const orders = await Order.find({ serviceProvider: user })
             .populate('user', ['name', 'email', 'profileImage'])
             .populate('service', ['name']);

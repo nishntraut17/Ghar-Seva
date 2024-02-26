@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import RateReview from '../components/RateReview';
 
 const UserOrders = () => {
     const [orders, setOrders] = useState([]);
@@ -12,6 +13,7 @@ const UserOrders = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [status, setStatus] = useState("");
     const [activeButton, setActiveButton] = useState('new');
+    const [modelOpen, setModelOpen] = useState(false);
 
     const fetchData = async () => {
         try {
@@ -138,12 +140,23 @@ const UserOrders = () => {
                     ))
                 }
                 {!loading && activeButton === 'completed' &&
-                    completedOrders?.map((order, i) => (
+                    completedOrders?.map((order) => (
                         <div key={order._id} className='mt-10 flex gap-10 hover:cursor-pointer items-center justify-center'>
                             <img src={order.serviceProvider.profileImage} alt="profile" className='h-20 w-20 rounded' />
                             <p className='text-left ml-2'>{order.service.name}</p>
                             <p className='text-left ml-2'>{order.serviceProvider.name}</p>
-                            <p>Rating and Review ka option idhar ayega</p>
+                            {
+                                // order.disableReview ? (
+                                <button onClick={() => {
+                                    setModelOpen(true);
+                                }} className='mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300'>Rate user</button>
+
+                                // ) : (<span>already rated </span>)
+                            }
+                            {modelOpen && (
+                                <RateReview
+                                    order={order._id} setModelOpen={setModelOpen} serviceProvider={order.serviceProvider._id}
+                                />)}
                         </div>
                     ))
                 }

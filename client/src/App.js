@@ -13,8 +13,21 @@ import UserOrders from './pages/UserOrders';
 import ServiceProviderOrders from './pages/ServiceProviderOrders';
 import AllServiceProviders from './pages/AllServiceProviders';
 import SingleServiceProvider from './pages/SingleServiceProvider';
+import Profile from './pages/Profile';
+import UpdateProfile from './pages/UpdateProfile';
+import VerifyEmail from './pages/VerifyEmail';
+
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "./redux/reducers/authSlice";
+import { jwtDecode } from "jwt-decode";
 
 function App() {
+  const dispatch = useDispatch();
+  const token = localStorage.getItem('token');
+  if (token) {
+    dispatch(setUserInfo(jwtDecode(token)));
+  }
+
   return (
     <div className="App">
       <Toaster />
@@ -25,11 +38,14 @@ function App() {
             <Route path='/service/add-service' element={<AddService />} />
             <Route path='/service' element={<AllServices />} />
             <Route path='/service/:id' element={<SingleService />} />
-            <Route path='/service/service-providers/:id' element={<SingleServiceProvider />} />
+            <Route path='/service-providers' element={<AllServiceProviders />} />
+            <Route path='/service-providers/:id' element={<SingleServiceProvider />} />
             <Route path='/service/provide-a-service' element={<ProvideAService />} />
-            <Route path='/service/service-providers' element={<AllServiceProviders />} />
             <Route path='/order/service-provider-orders' element={<ServiceProviderOrders />} />
             <Route path='/order/user-orders' element={<UserOrders />} />
+            <Route path='/profile/:id' element={<Profile />} />
+            <Route path='/profile/updateprofile/:id' element={<UpdateProfile />} />
+            <Route path='/verify-email' element={<VerifyEmail />} />
           </Route>
           <Route path='/auth/signup' element={<Signup />} />
           <Route path='/auth/login' element={<Login />} />

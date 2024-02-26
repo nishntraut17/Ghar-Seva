@@ -97,7 +97,7 @@ const Avatar = () => {
             >
                 <MenuItem>
                     <Link
-                        to={`/profile/${decoded.userId}`}
+                        to={`/profile/${decoded._id}`}
                         className="flex items-center"
                     >
                         <MuiAvatar
@@ -109,31 +109,9 @@ const Avatar = () => {
                     </Link>
                 </MenuItem>
                 {console.log(user)}
-                {(user.role === 'seller' || user.role === 'admin') && (
+                {(user) && (
                     <Box>
                         <Divider />
-                        <MenuItem>
-                            <Link
-                                to="/services/add-services"
-                                className="flex items-center"
-                            >
-                                <ListItemIcon>
-                                    <IoAdd />
-                                </ListItemIcon>
-                                Add new service
-                            </Link>
-                        </MenuItem>
-                        <MenuItem>
-                            <Link
-                                to="/product/my-items"
-                                className="flex items-center"
-                            >
-                                <ListItemIcon>
-                                    <FaShopify />
-                                </ListItemIcon>
-                                My Services
-                            </Link>
-                        </MenuItem>
                     </Box>
                 )}
 

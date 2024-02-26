@@ -1,4 +1,5 @@
 const Service = require("../models/service");
+const User = require("../models/users");
 
 const getAllServices = async (req, res) => {
     try {
@@ -11,7 +12,7 @@ const getAllServices = async (req, res) => {
 
 const getService = async (req, res) => {
     try {
-        const service = await Service.findById(req.params.id).populate('serviceProviders', ['name', 'email', 'profileImage']);
+        const service = await Service.findById(req.params.id).populate('serviceProviders', ['name', 'email', 'profileImage', 'city']);
         if (!service) {
             return res.status(400).send("Service not found");
         }
@@ -52,14 +53,20 @@ const addUserToService = async (req, res) => {
         }
 
         const service = await Service.findById(req.params.id);
+        const user = await User.findById(req.body.user._id);
 
         if (!service) {
             return res.status(404).send('Service not found');
         }
 
-        // Assuming req.body.user is an ObjectId or a user object
-        service.serviceProviders.push(req.body.user.userId);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
 
+        // Assuming req.body.user is an ObjectId or a user object
+        user.services.push(service._id);
+        user.save();
+        service.serviceProviders.push(req.body.user._id);
         const updatedService = await service.save();
 
         // Log the updated service before sending it back

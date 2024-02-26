@@ -39,9 +39,9 @@ export default function Login() {
                     email, password
                 }),
                 {
-                    success: "SignUp successfully",
-                    error: "Unable to Register",
-                    loading: "Signing up user...",
+                    success: "Login successfully",
+                    error: "Unable to Login",
+                    loading: "Logging user...",
                 }
             )
 
