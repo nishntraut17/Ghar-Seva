@@ -117,6 +117,7 @@ const updateUser = async (req, res) => {
         user.profileImage = req.body.profileImage;
         user.mobile = req.body.mobile;
         user.address = req.body.address;
+        user.city = req.body.city;
         const hashedPass = await bcrypt.hash(req.body.password, 10);
         user.password = hashedPass;
         await user.save();

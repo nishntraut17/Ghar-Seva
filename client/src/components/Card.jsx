@@ -15,15 +15,16 @@ const Card = ({ name, image, id }) => {
     return (
         <div>
             <Link to={`/service/${id}`}>
-                <div className="flex flex-col rounded-md gap-2 cursor-pointer hover:scale-105 border-2 border-gray-200 p-2 hover:shadow-md">
-                    <div className="h-40 w-full rounded-md overflow-hidden">
-                        <img src={image} alt="service" className="h-full w-full object-cover" />
+                <div className="rounded-md cursor-pointer duration-300 ease-in-out transform hover:-translate-y-1">
+                    <div className="h-40 w-56 overflow-hidden rounded-md">
+                        <img src={image} alt="service" className="object-cover w-full h-full transition duration-300 ease-in-out transform hover:scale-105 z-20" />
                     </div>
-                    <p className="text-gray-900 font-bold text-xl text-left">{name}</p>
+                    <p className="text-gray-900 font-bold text-xl mt-2">{name}</p>
                 </div>
             </Link>
         </div>
     );
+
 }
 
 export default Card

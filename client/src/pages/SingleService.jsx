@@ -6,6 +6,7 @@ import BookService from '../components/BookService';
 import { jwtDecode } from 'jwt-decode';
 import QS from '../assets/QS2.png';
 import HelpIcon from '@mui/icons-material/Help';
+import CloseIcon from '@mui/icons-material/Close';
 
 const SingleService = () => {
     const user = jwtDecode(localStorage.getItem('token'));
@@ -15,6 +16,8 @@ const SingleService = () => {
     const [modelOpen, setModelOpen] = useState(false);
     const [subServices, setSubServices] = useState([]);
     const [selectedSubServices, setSelectedSubServices] = useState([]);
+    const [cityServiceProviders, setCityServiceProviders] = useState([]);
+    const [infoToggle, setInfoToggle] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -26,6 +29,9 @@ const SingleService = () => {
                 console.log(response.data);
                 setSubServices(response.data.subServices);
                 setService(response.data);
+                const temp = response.data.serviceProviders.filter(serviceProvider => serviceProvider.city === user.city);
+                setCityServiceProviders(temp);
+                console.log('City Service Provider', cityServiceProviders);
             } catch (error) {
                 console.error('Axios error:', error);
             } finally {
@@ -33,7 +39,7 @@ const SingleService = () => {
             }
         }
         fetchData();
-    }, [id]);
+    }, []);
 
     const toggleSubService = (subService) => {
         setSelectedSubServices(prevSelectedSubServices => {
@@ -41,10 +47,15 @@ const SingleService = () => {
             if (isSelected) {
                 return prevSelectedSubServices.filter(item => item !== subService);
             } else {
+                console.log(subService);
                 return [...prevSelectedSubServices, subService];
             }
         });
     };
+
+    useEffect(() => {
+        console.log(selectedSubServices);
+    }, [selectedSubServices]);
 
     if (loading) {
         return <p>Loading...</p>;
@@ -52,58 +63,63 @@ const SingleService = () => {
 
     return (
         <div className='flex flex-col'>
-
             <div className='w-full h-80 overflow-hidden'>
                 <img src={service.images[0]} alt='service' className='rounded-lg w-full' />
             </div>
             <div className='m-12'>
                 <h1 className='font-bold text-gray-800 text-4xl text-left my-5'>{service.name}</h1>
-
                 <div className="flex flex-row gap-20 text-gray-900 justify-between">
                     <div className='w-1/4 border-2 border-gray-200 p-4 rounded-md shadow-md'>
-                        <div className='flex flex-row justify-between'>
-                            <div className='text-left mb-3 text-gray-600'>Select services </div>
-                            <HelpIcon />
-                        </div>
-                        <div className='flex flex-wrap'>
-                            {subServices.map((service, index) => (
-                                <span
-                                    key={index}
-                                    className={`bg-gray-100 rounded-md m-1 p-2 cursor-pointer hover:scale-105 hover:bg-gray-200 transition duration-300 ${selectedSubServices.includes(service) ? 'bg-blue-400' : ''}`}
-                                    onClick={() => toggleSubService(service)}
-                                >
-                                    {service}
-                                </span>
-                            ))}
+                        {infoToggle ? (
+                            <div>
+                                <button onClick={() => setInfoToggle(false)} className='flex justify-end'><CloseIcon /></button>
+                                <p className='text-gray-700 text-left'>Instructions:
+                                    <br /> Choose from given options of service
+                                    <br /> Click on Request service
+                                    <br /> Select time and date
+                                    <br /> Request will be sent to all service provider</p>
+                            </div>) : (
+                            <div>
+                                <div className='flex flex-row justify-between'>
+                                    <div className='text-left mb-3 text-gray-600'>Select services </div>
+                                    <button onClick={() => setInfoToggle(true)}>
+                                        <HelpIcon />
+                                    </button>
+                                </div>
+                                <div className='flex flex-wrap'>
+                                    {subServices.map((service, index) => (
+                                        <span
+                                            key={index}
+                                            className={`rounded-md m-1 p-2 cursor-pointer hover:scale-105 hover:bg-gray-200 transition duration-300 ${selectedSubServices.includes(service) ? 'bg-blue-400' : 'bg-gray-100'}`}
+                                            onClick={() => toggleSubService(service)}
+                                        >
+                                            {service}
+                                        </span>
+                                    ))}
+                                </div>
+                                <button onClick={() => setModelOpen(true)} className='mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300'>Request Service</button>
+                            </div>
+                        )}
 
-                        </div>
-                        <button onClick={() => {
-                            setModelOpen(true);
-                        }} className='mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300'>Book Service</button>
                     </div>
                     <div className='flex flex-row w-3/4'>
-                        <p className='text-gray-700 text-left'>Instructions: <br /> Choose from given options of service <br /> Click on Book service <br /> Select time and date <br /> Request will be sent to all service provider</p>
                         <div className='w-72 h-44'>
                             <img src={QS} alt="" className='w-full h-full' />
                         </div>
                     </div>
-
                     {modelOpen && (
                         <BookService
                             user={user}
                             service={id}
                             setModalOpen={setModelOpen}
                             subServices={selectedSubServices}
+                            cityServiceProviders={cityServiceProviders}
                         />
                     )}
                 </div>
-
-
                 <p className='font-bold text-gray-800 text-2xl text-left my-10'> Available service providers</p>
                 <div className='my-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
-
-                    {service?.serviceProviders
-                        .filter(serviceProvider => serviceProvider.city === user.city) // Filter service providers by city
+                    {cityServiceProviders.length > 0 && (cityServiceProviders
                         .map((serviceProvider, i) => (
                             <div key={i} className='rounded-lg shadow-xl hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 overflow-hidden'>
                                 <Link to={`/service-providers/${serviceProvider._id}`} key={i}>
@@ -120,10 +136,10 @@ const SingleService = () => {
                                     <p className='text-gray-600'>{serviceProvider.email}</p>
                                 </div>
                             </div>
-                        ))}
-
+                        )))
+                    }
                 </div>
-
+                {cityServiceProviders.length === 0 && (<p className='text-4xl font-bold text-slate-200'>No Service Providers Available for {user.city}</p>)}
             </div>
         </div>
     );

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { IoMdClose } from "react-icons/io";
+import SendIcon from '@mui/icons-material/Send';
 
-const BookService = ({ setModalOpen, service, selectedSubServices }) => {
+const BookService = ({ setModalOpen, service, subServices, cityServiceProviders }) => {
     const [formDetails, setFormDetails] = useState({
         date: "",
         time: "",
@@ -23,7 +24,8 @@ const BookService = ({ setModalOpen, service, selectedSubServices }) => {
             date: formDetails.date,
             time: formDetails.time,
             service: service,
-            subServices: selectedSubServices
+            subServices: subServices,
+            cityServiceProviders: cityServiceProviders
         });
         console.log(localStorage.getItem("token"));
         try {
@@ -34,7 +36,8 @@ const BookService = ({ setModalOpen, service, selectedSubServices }) => {
                         date: formDetails.date,
                         time: formDetails.time,
                         service: service,
-                        subServices: selectedSubServices
+                        subServices: subServices,
+                        cityServiceProviders: cityServiceProviders
                     },
                     {
                         headers: {
@@ -54,8 +57,12 @@ const BookService = ({ setModalOpen, service, selectedSubServices }) => {
         }
     };
 
+    useEffect(() => {
+        console.log(subServices);
+    }, [subServices]);
+
     return (
-        <div className="fixed inset-0 flex justify-center items-center bg-gray-300 bg-opacity-50">
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-300 bg-opacity-50 z-50">
             <div className="bg-white p-8 rounded-lg w-full max-w-md">
                 <div className="flex justify-end">
                     <IoMdClose
@@ -65,7 +72,15 @@ const BookService = ({ setModalOpen, service, selectedSubServices }) => {
                         className="cursor-pointer text-gray-500 hover:text-gray-700"
                     />
                 </div>
-                <h2 className="text-2xl font-semibold mb-6">Book Service</h2>
+                <div className="text-lg font-semibold mb-2 text-left">Following are the selected services</div>
+                <div className="font-semibold text-gray-500 text-left mb-6">
+                    {
+                        subServices.map((service) => {
+                            return <p>{service}</p>
+                        })
+                    }
+                </div>
+                <h2 className="text-lg font-semibold mb-6">Select Date and Time of your convenience</h2>
                 <form className="mb-4">
                     <div className="flex flex-col mb-4">
                         <label htmlFor="date" className="text-gray-600 mb-1">Date</label>
@@ -95,7 +110,8 @@ const BookService = ({ setModalOpen, service, selectedSubServices }) => {
                         className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                         onClick={bookService}
                     >
-                        Book
+                        Send {"  "}
+                        <SendIcon className="" />
                     </button>
                 </form>
             </div>

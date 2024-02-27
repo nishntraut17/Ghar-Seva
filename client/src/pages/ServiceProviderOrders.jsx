@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from "react-hot-toast";
+import Fee from '../components/Fee';
 
 const ServiceProviderOrders = () => {
     const [orders, setOrders] = useState([]);
@@ -10,9 +11,8 @@ const ServiceProviderOrders = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(false);
-    const [fees, setFees] = useState(0);
-    const [showFeesInput, setShowFeesInput] = useState(false);
     const [activeButton, setActiveButton] = useState('new');
+    const [modelOpen, setModelOpen] = useState(false);
 
     const fetchData = async () => {
         setLoading(true);
@@ -40,7 +40,7 @@ const ServiceProviderOrders = () => {
             toast.error("Failed to fetch orders.");
         } finally {
             setLoading(false);
-            setShowFeesInput(false);
+            // setShowFeesInput(false);
         }
     }
 
@@ -71,37 +71,10 @@ const ServiceProviderOrders = () => {
         }
     }
 
-    const handleAccept = async () => {
-        try {
-            console.log(selectedOrder);
-            const token = localStorage.getItem("token");
-            if (!token) {
-                throw new Error("Token not found in localStorage.");
-            }
-            await axios.put(`http://localhost:5000/api/order/service-provider-accept/${selectedOrder._id}`,
-                { status: status, fees: fees },
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            toast.success('Success')
-            fetchData();
-
-        } catch (err) {
-            console.error('Accepting order error:', err);
-            toast.error("Failed to accept/reject order.");
-        }
-    }
-
     const handleRejectOrAccept = (order, status, i) => {
         setStatus(status);
         setSelectedOrder(order);
         if (i === 1) handleReject();
-        else {
-            setShowFeesInput(true);
-        }
     }
 
     useEffect(() => {
@@ -136,18 +109,13 @@ const ServiceProviderOrders = () => {
                             <p className='text-left ml-2'>{order.user.name}</p>
                             <p className='text-left ml-2'>{order.user.email}</p>
                             <button onClick={() => handleRejectOrAccept(order, "cancelled", 1)} className="bg-red-400 h-10 w-20 rounded hover:bg-red-500">Cancel</button>
-                            <button onClick={() => handleRejectOrAccept(order, "service-provider-accepted", 2)} className="bg-red-400 h-10 w-20 rounded hover:bg-red-500">Accept & Enter Fees</button>
-                            {showFeesInput && selectedOrder._id === order._id && (
-                                <input
-                                    type="number"
-                                    value={fees}
-                                    onChange={(e) => setFees(e.target.value)}
-                                    placeholder="Enter Fees"
-                                />
-                            )}
-                            {showFeesInput && selectedOrder._id === order._id && (
-                                <button onClick={handleAccept} className="bg-green-400 h-10 w-20 rounded hover:bg-green-500">Accept</button>
-                            )}
+                            <button onClick={() => setModelOpen(true)} className="bg-red-400 h-10 w-20 rounded hover:bg-red-500">Accept & Enter Fees</button>
+
+                            {modelOpen && (
+                                <Fee
+                                    order={order} setModelOpen={setModelOpen} fetchData={fetchData}
+                                />)
+                            }
                         </div>
                     ))
                 }

@@ -20,6 +20,7 @@ import VerifyEmail from './pages/VerifyEmail';
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "./redux/reducers/authSlice";
 import { jwtDecode } from "jwt-decode";
+import SingleOrder from './pages/SingleOrder';
 
 function App() {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function App() {
             <Route path='/profile/:id' element={<Profile />} />
             <Route path='/profile/updateprofile/:id' element={<UpdateProfile />} />
             <Route path='/verify-email' element={<VerifyEmail />} />
+            <Route path='/order/:id' element={<SingleOrder />} />
           </Route>
           <Route path='/auth/signup' element={<Signup />} />
           <Route path='/auth/login' element={<Login />} />

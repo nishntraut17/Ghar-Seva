@@ -69,7 +69,7 @@ const ProvideAService = () => {
                 {services.length && services.map((service) => (
                     <button
                         onClick={() => setSelectedService(service._id)}
-                        className={`flex border-2 border-gray-400 rounded-md bg-gray-300 gap-2 p-1 hover:scale-105 ${selectedService === service._id ? 'bg-slate-400' : ''}`}
+                        className={`flex border-2 border-gray-400 rounded-md bg-gray-100 gap-2 p-1 hover:scale-105 ${selectedService === service._id ? 'bg-slate-200' : ''}`}
                         key={service._id}
                     >
                         <div>
@@ -82,7 +82,7 @@ const ProvideAService = () => {
                     </button>
                 ))}
             </div>
-            <button onClick={handleSubmit} disabled={submitting} className='border-2 bg-slate-50 border-slate-200 hover:scale-105 rounded-lg mt-10 p-2'>Submit</button>
+            <button onClick={handleSubmit} disabled={submitting} className='border-2 bg-slate-50 border-slate-300 hover:scale-105 rounded-lg mt-10 p-2'>Submit</button>
         </div>
     )
 }

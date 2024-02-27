@@ -1,179 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
-import RateReview from '../components/RateReview';
+import { NavLink } from 'react-router-dom';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import EventIcon from '@mui/icons-material/Event';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const UserOrders = () => {
-    const [orders, setOrders] = useState([]);
-    const [newOrders, setNewOrders] = useState([]);
-    const [completedOrders, setCompletedOrders] = useState([]);
-    const [cancelledOrders, setCancelledOrders] = useState([]);
-    const [serviceProviderAcceptedOrders, setServiceProviderAcceptedOrders] = useState([]);
+    const [groupedOrders, setGroupedOrders] = useState({});
     const [loading, setLoading] = useState(false);
-    const [selectedOrder, setSelectedOrder] = useState(null);
-    const [status, setStatus] = useState("");
-    const [activeButton, setActiveButton] = useState('new');
-    const [modelOpen, setModelOpen] = useState(false);
-
-    const fetchData = async () => {
-        try {
-            const response = await axios.get(`http://localhost:5000/api/order/user/`, {
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            });
-            if (response.status !== 200) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            console.log(response.data);
-            setOrders(response.data);
-        } catch (error) {
-            console.error('Axios error:', error);
-        } finally {
-            setLoading(false);
-        }
-    }
+    // const [activeButton, setActiveButton] = useState('new');
 
     useEffect(() => {
-        fetchData();
+        const fetchOrders = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/api/order/user/`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                setGroupedOrders(response.data);
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrders();
     }, []);
 
-    const setActive = (button) => {
-        setActiveButton(button);
-    }
-
-    const handleReject = async () => {
-        try {
-            console.log(selectedOrder);
-            const token = localStorage.getItem("token");
-            if (!token) {
-                throw new Error("Token not found in localStorage.");
-            }
-            await axios.put(`http://localhost:5000/api/order/cancel/${selectedOrder._id}`,
-                { status: status },
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            toast.success('Success')
-            fetchData();
-        } catch (err) {
-            console.error('Accepting order error:', err);
-            toast.error("Failed to accept/reject order.");
-        }
-    }
-
-    const handleAccept = async (req, res) => {
-        try {
-            console.log(selectedOrder);
-            const token = localStorage.getItem("token");
-            if (!token) {
-                throw new Error("Token not found in localStorage.");
-            }
-            await axios.put(`http://localhost:5000/api/order/complete/${selectedOrder._id}`,
-                { status: status },
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            toast.success('Success')
-            fetchData();
-        } catch (error) {
-            console.error('Accepting order error:', error);
-            toast.error("Failed to accept/reject order.");
-        }
-    }
-
-    useEffect(() => {
-        setNewOrders(orders.filter(order => order.status === 'user requests'));
-        setCompletedOrders(orders.filter(order => order.status === 'completed'));
-        setCancelledOrders(orders.filter(order => order.status === 'cancelled'));
-        setServiceProviderAcceptedOrders(orders.filter(order => order.status === 'service-provider-accepted'));
-    }, [orders]);
-
-    const handleAcceptOrReject = (order, status, i) => {
-        setStatus(status);
-        setSelectedOrder(order);
-        if (i === 1) handleReject();
-        else handleAccept();
-    }
-
     return (
-        <div className="flex">
-            <div className="w-1/6 bg-gray-200 p-4 h-screen">
+        <div className="flex justify-center">
+            <div className="">
                 {loading && <div>Loading...</div>}
-                {!loading &&
-                    <div className='mt-10 flex flex-col'>
-                        <button onClick={() => setActive('new')} className={`mr-2 mb-2 px-4 py-2 rounded ${activeButton === 'new' ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}`}>Newly Placed Orders</button>
-                        <button onClick={() => setActive('accepted')} className={`mr-2 mb-2 px-4 py-2 rounded ${activeButton === 'accepted' ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}`}>Orders Accepted by Service Provider</button>
-                        <button onClick={() => setActive('completed')} className={`mr-2 mb-2 px-4 py-2 rounded ${activeButton === 'completed' ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}`}>Completed Orders</button>
-                        <button onClick={() => setActive('cancelled')} className={`mr-2 mb-2 px-4 py-2 rounded ${activeButton === 'cancelled' ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}`}>Cancelled Orders</button>
-                    </div>
-                }
             </div>
-            <div className="w-5/6 p-4 h-screen">
-                {!loading && activeButton === 'new' &&
-                    newOrders?.map((order, i) => (
-                        <div key={order._id} className='mt-10 flex gap-10 hover:cursor-pointer items-center justify-center'>
-                            <img src={order.serviceProvider.profileImage} alt="profile" className='h-20 w-20 rounded' />
-                            <p className='text-left ml-2'>{order.service.name}</p>
-                            <p className='text-left ml-2'>{order.serviceProvider.name}</p>
-                            <button onClick={() => handleAcceptOrReject(order, "cancelled", 1)} className="bg-red-400 h-10 w-20 rounded hover:bg-red-500">Cancel</button>
-                        </div>
-                    ))
-                }
-                {!loading && activeButton === 'accepted' &&
-                    serviceProviderAcceptedOrders?.map((order, i) => (
-                        <div key={order._id} className='mt-10 flex gap-10 hover:cursor-pointer items-center justify-center'>
-                            <img src={order.serviceProvider.profileImage} alt="profile" className='h-20 w-20 rounded' />
-                            <p className='text-left ml-2'>{order.service.name}</p>
-                            <p className='text-left ml-2'>{order.serviceProvider.name}</p>
-                            {/* <p className='text-left ml-2'>{order.serviceProvider.email}</p> */}
-                            <p className='text-left ml-2'>{order.fees}</p>
-                            <button onClick={() => handleAcceptOrReject(order, "cancelled", 1)} className="bg-red-400 h-10 w-20 rounded hover:bg-red-500">Reject</button>
-                            <button onClick={() => handleAcceptOrReject(order, "completed", 1)} className="bg-blue-400 h-10 w-20 rounded hover:bg-blue-500">Accept</button>
-                        </div>
-                    ))
-                }
-                {!loading && activeButton === 'completed' &&
-                    completedOrders?.map((order) => (
-                        <div key={order._id} className='mt-10 flex gap-10 hover:cursor-pointer items-center justify-center'>
-                            <img src={order.serviceProvider.profileImage} alt="profile" className='h-20 w-20 rounded' />
-                            <p className='text-left ml-2'>{order.service.name}</p>
-                            <p className='text-left ml-2'>{order.serviceProvider.name}</p>
-                            {
-                                // order.disableReview ? (
-                                <button onClick={() => {
-                                    setModelOpen(true);
-                                }} className='mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300'>Rate user</button>
+            <div className="my-12 flex flex-col justify-center items-center">
+                <div className='text-2xl font-bold text-left'>All Orders</div>
+                {Object.keys(groupedOrders).map(groupId => (
+                    <div key={groupId} className='border-2 m-4 rounded-md'>
+                        <div className='flex flex-row gap-6 p-4 text-gray-700'>
+                            <div className='flex flex-row gap-4'>
+                                <h3 className="text-lg font-bold text-left flex items-center">{groupedOrders[groupId][0].service.name}</h3>
+                                <h3 className="text-sm font-bold text-left flex items-center">Request ID: {groupId}</h3>
+                                <h3 className="text-sm font-bold text-left flex items-center"><EventIcon /> {groupedOrders[groupId][0].date}</h3>
+                                <h3 className="text-sm font-bold text-left flex items-center"><AccessTimeIcon /> {groupedOrders[groupId][0].time}</h3>
 
-                                // ) : (<span>already rated </span>)
-                            }
-                            {modelOpen && (
-                                <RateReview
-                                    order={order._id} setModelOpen={setModelOpen} serviceProvider={order.serviceProvider._id}
-                                />)}
+                            </div>
+                            {/* <button onClick={() => setActive('cancelled')} className={` flex rounded p-10 ${activeButton === 'cancelled' ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}`}>Cancel Order</button> */}
+                            <NavLink to={`/order/${groupId}`} className='flex items-center'>
+                                <button className='text-sm bg-slate-100 rounded-lg p-2 border-2 border-slate-300 hover:bg-slate-200'> View more <ReadMoreIcon /></button>
+                            </NavLink>
                         </div>
-                    ))
-                }
-                {!loading && activeButton === 'cancelled' &&
-                    cancelledOrders?.map((order, i) => (
-                        <div key={order._id} className='mt-10 flex gap-10 hover:cursor-pointer items-center justify-center'>
-                            <img src={order.serviceProvider.profileImage} alt="profile" className='h-20 w-20 rounded' />
-                            <p className='text-left ml-2'>{order.service.name}</p>
-                            <p className='text-left ml-2'>{order.serviceProvider.name}</p>
-                            {/* <p className='text-left ml-2'>{order.serviceProvider.email}</p> */}
-                        </div>
-                    ))
-                }
+                    </div>
+                ))}
             </div>
         </div>
-    )
-
-}
+    );
+};
 
 export default UserOrders;

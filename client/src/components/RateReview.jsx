@@ -6,7 +6,7 @@ import { selectCurrentUser } from "../redux/reducers/authSlice";
 import { useSelector } from 'react-redux';
 import { Rating } from '@mui/material';
 
-const RateReview = ({ setModelOpen, order, serviceProvider }) => {
+const RateReview = ({ setModelOpen, order, serviceProvider, fetchData }) => {
     const [formDetails, setFormDetails] = useState({
         rating: 0,
         review: "",
@@ -48,6 +48,7 @@ const RateReview = ({ setModelOpen, order, serviceProvider }) => {
                 }
             );
             setModelOpen(false);
+            fetchData();
         } catch (error) {
             console.error('Error while submitting review:', error);
             toast.error("Failed to rate or review.");
@@ -70,7 +71,6 @@ const RateReview = ({ setModelOpen, order, serviceProvider }) => {
                 <h2 className="text-2xl font-semibold mb-6">Rate and Review</h2>
                 <form className="mb-4">
                     <div className="flex flex-col mb-4">
-                        <label htmlFor="rating" className="text-gray-600 mb-1">Rate</label>
                         <label>
                             Rate:
                             <Rating
