@@ -1,7 +1,8 @@
-const express = require("express");
-const userRouter = express.Router();
-const { register, login, getAllUsers, getUser, updateUser, verifyEmail, rateAndReviewUser } = require('../controllers/users');
-const auth = require("../middleware/auth");
+import express, { Router } from "express";
+import { register, login, getAllUsers, getUser, updateUser, verifyEmail, rateAndReviewUser } from '../controllers/users';
+import auth from "../middleware/auth";
+
+const userRouter: Router = express.Router();
 
 userRouter.post('/register', register);
 userRouter.post('/login', login);
@@ -12,4 +13,4 @@ userRouter.put('/:id', updateUser);
 userRouter.post('/update', updateUser);
 userRouter.put('/rate-review/:id', rateAndReviewUser);
 
-module.exports = userRouter;
+export = userRouter;

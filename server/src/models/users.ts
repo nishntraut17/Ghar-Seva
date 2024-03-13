@@ -1,6 +1,27 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema, Document, Types } from "mongoose";
 
-const userSchema = mongoose.Schema({
+interface IUser extends Document {
+    name?: string;
+    email: string;
+    mobile?: string;
+    address?: string;
+    city?: string;
+    password: string;
+    profileImage?: string;
+    role?: string;
+    testimonials?: {
+        customer: Types.ObjectId;
+        review?: string;
+        rating?: number;
+        date?: Date;
+        order?: Types.ObjectId;
+    }[];
+    services?: Types.ObjectId[];
+    isVerified?: boolean;
+    emailToken?: string;
+}
+
+const userSchema: Schema<IUser> = new Schema<IUser>({
     name: {
         type: String,
     },
@@ -19,7 +40,8 @@ const userSchema = mongoose.Schema({
         type: String,
     },
     password: {
-        type: String, required: true
+        type: String,
+        required: true
     },
     profileImage: {
         type: String,
@@ -32,7 +54,7 @@ const userSchema = mongoose.Schema({
     testimonials: [
         {
             customer: {
-                type: mongoose.Schema.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "User",
             },
             review: {
@@ -41,24 +63,27 @@ const userSchema = mongoose.Schema({
             rating: { type: Number },
             date: {
                 type: Date,
-                default: Date.now(),
+                default: Date.now,
             },
             order: {
-                type: mongoose.Schema.Types.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "Order"
             }
         },
     ],
     services: [
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "Service"
         }
     ],
     isVerified: {
-        type: Boolean, default: false,
+        type: Boolean,
+        default: false,
     },
     emailToken: { type: String },
 });
 
-module.exports = mongoose.model('User', userSchema);
+const User = mongoose.model<IUser>('User', userSchema);
+
+export default User;
