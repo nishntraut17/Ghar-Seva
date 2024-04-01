@@ -21,6 +21,8 @@ import { useDispatch } from "react-redux";
 import { setUserInfo } from "./redux/reducers/authSlice";
 import { jwtDecode } from "jwt-decode";
 import SingleOrder from './pages/SingleOrder';
+import SellerHome from './pages/SellerHome';
+import Notifications from './pages/Notifications';
 
 function App() {
   const dispatch = useDispatch();
@@ -36,6 +38,7 @@ function App() {
         <Routes>
           <Route path='/' element={<RootLayout />}>
             <Route path='/' element={<Home />} />
+            <Route path='/seller-home' element={<SellerHome />} />
             <Route path='/service/add-service' element={<AddService />} />
             <Route path='/service' element={<AllServices />} />
             <Route path='/service/:id' element={<SingleService />} />
@@ -48,6 +51,7 @@ function App() {
             <Route path='/profile/updateprofile/:id' element={<UpdateProfile />} />
             <Route path='/verify-email' element={<VerifyEmail />} />
             <Route path='/order/:id' element={<SingleOrder />} />
+            <Route path='/notifications' element={<Notifications />} />
           </Route>
           <Route path='/auth/signup' element={<Signup />} />
           <Route path='/auth/login' element={<Login />} />

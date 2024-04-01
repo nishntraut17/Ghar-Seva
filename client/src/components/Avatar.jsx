@@ -12,9 +12,10 @@ import {
 } from "@mui/material";
 import {
     Logout,
+    Notifications,
 } from "@mui/icons-material";
 import { IoAdd } from "react-icons/io5";
-import { FaShopify } from "react-icons/fa";
+import { FaFirstOrder, FaShopify } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { selectCurrentUser, setUserInfo } from "../redux/reducers/authSlice";
@@ -114,6 +115,22 @@ const Avatar = () => {
                         <Divider />
                     </Box>
                 )}
+                <MenuItem>
+                    <Link to="/notifications">
+                        <ListItemIcon>
+                            <Notifications fontSize="small" />
+                        </ListItemIcon>
+                        Notifications
+                    </Link>
+                </MenuItem>
+                <MenuItem>
+                    <Link to="/user-orders">
+                        <ListItemIcon>
+                            <FaFirstOrder fontSize="small" />
+                        </ListItemIcon>
+                        Orders
+                    </Link>
+                </MenuItem>
 
                 <MenuItem onClick={handleLogout}>
                     <ListItemIcon>

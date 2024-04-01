@@ -69,7 +69,7 @@ const SingleServiceProvider = () => {
                         {user.services.length ? (user.services.map((service) => (
                             <div key={service._id} className='border-2 border-slate-200 rounded-md hover:shadow-md'>
                                 <div className='w-40 h-24 overflow-hidden rounded-t-md'>
-                                    <img src={service.images[0]} alt="ok" className='w-full h-full object-cover' />
+                                    <img src={service.image} alt="ok" className='w-full h-full object-cover' />
                                 </div>
                                 <p className='text-center p-2'>{service.name}</p>
                             </div>

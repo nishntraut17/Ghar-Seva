@@ -20,11 +20,6 @@ app.use('/api/user', userRouter);
 app.use('/api/service', serviceRouter);
 app.use('/api/order', orderRouter);
 
-app.get('/', (req, res) => {
-    res.send('Get Request');
-});
-
-const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(`Server Running on port: ${PORT}`);
+app.listen(process.env.PORT, () => {
+    console.log(`Server Running on port: ${process.env.PORT}`);
 });

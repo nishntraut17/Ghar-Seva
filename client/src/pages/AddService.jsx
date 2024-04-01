@@ -5,9 +5,8 @@ import axios from 'axios';
 import { Image } from "@mui/icons-material";
 
 function AddService() {
-    const [imagePreviews, setImagePreviews] = useState([]);
     const navigate = useNavigate();
-    const [files, setFiles] = useState([]);
+    const [file, setFile] = useState("");
     const [loading, setLoading] = useState(false);
     const [formDetails, setFormDetails] = useState({
         name: "",
@@ -16,21 +15,6 @@ function AddService() {
     });
     const [service, setService] = useState("");
 
-    const handleImageChange = (elements) => {
-        const newPreviews = Array.from(elements).map(element => {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    resolve(reader.result);
-                };
-                reader.readAsDataURL(element);
-            });
-        });
-
-        Promise.all(newPreviews).then((previews) => {
-            setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]);
-        });
-    };
 
     const addSubServices = () => {
         if (!service) {
@@ -54,7 +38,6 @@ function AddService() {
 
     const onUpload = async (elements) => {
         setLoading(true);
-        handleImageChange(elements);
 
         const uploadPromises = Array.from(elements).map(async (element) => {
             if (element.type === "image/jpeg" || element.type === "image/png") {
@@ -75,8 +58,8 @@ function AddService() {
 
         const uploadedFiles = await Promise.all(uploadPromises);
 
-        setFiles((prevFiles) => [...prevFiles, ...uploadedFiles.filter(file => file !== null)]);
-        console.log(files);
+        setFile(uploadedFiles[0]);
+        console.log(file);
         setLoading(false);
     };
 
@@ -85,7 +68,7 @@ function AddService() {
             e.preventDefault();
 
             if (loading) return;
-            if (files.length === 0) return;
+            if (file === "") return toast.error("Please upload an image");
 
             const { name, description, subServices } = formDetails;
             console.log(formDetails);
@@ -93,7 +76,7 @@ function AddService() {
                 axios.post('http://localhost:5000/api/service', {
                     name,
                     description,
-                    images: files,
+                    image: file,
                     subServices: subServices
                 }, {
                     headers: {
@@ -179,15 +162,6 @@ function AddService() {
                         className="hidden"
                     />
                     <label htmlFor="profile-pic" className='block font-medium mb-2 hover:cursor-pointer' for='profile-pic'>Upload Image: <Image /></label>
-                    {imagePreviews.map((preview, index) => (
-                        <div key={index}>
-                            <img
-                                src={preview}
-                                alt={`Preview ${index}`}
-                                style={{ maxWidth: '100%', maxHeight: '200px' }}
-                            />
-                        </div>
-                    ))}
                 </div>
 
 

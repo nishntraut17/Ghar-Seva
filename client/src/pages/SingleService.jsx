@@ -64,12 +64,12 @@ const SingleService = () => {
     return (
         <div className='flex flex-col'>
             <div className='w-full h-80 overflow-hidden'>
-                <img src={service.images[0]} alt='service' className='rounded-lg w-full' />
+                <img src={service.image} alt='service' className='rounded-lg w-full' />
             </div>
             <div className='m-12'>
                 <h1 className='font-bold text-gray-800 text-4xl text-left my-5'>{service.name}</h1>
-                <div className="flex flex-row gap-20 text-gray-900 justify-between">
-                    <div className='w-1/4 border-2 border-gray-200 p-4 rounded-md shadow-md'>
+                <div className="flex flex-col md:flex-row gap-4 md:gap-20 text-gray-900 justify-between">
+                    <div className='md:w-1/4 border-2 border-gray-200 p-4 rounded-md shadow-md'>
                         {infoToggle ? (
                             <div>
                                 <button onClick={() => setInfoToggle(false)} className='flex justify-end'><CloseIcon /></button>
@@ -102,8 +102,8 @@ const SingleService = () => {
                         )}
 
                     </div>
-                    <div className='flex flex-row w-3/4'>
-                        <div className='w-72 h-44'>
+                    <div className='flex flex-row md:w-3/4'>
+                        <div className='w-80 md:w-72 h-44'>
                             <img src={QS} alt="" className='w-full h-full' />
                         </div>
                     </div>

@@ -3,6 +3,9 @@ import { Request, Response } from 'express';
 import OrderModel from '../models/orders';
 import UserModel from '../models/users';
 import ServiceModel from '../models/services';
+import stripe from 'stripe';
+import dotenv from 'dotenv';
+dotenv.config();
 
 interface AuthRequest extends Request {
     user?: any; // Define the user property here with appropriate type
@@ -116,6 +119,33 @@ export const cancelOrder = async (req: Request, res: Response): Promise<void> =>
 
 export const completeOrder = async (req: Request, res: Response): Promise<void> => {
     try {
+        const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY as string);
+        const order = await OrderModel.findById(req.params.id);
+
+        if (!order) {
+            res.status(404).send("No such order found.");
+            return;
+        }
+
+        const lineItems = {
+            price_data: {
+                currency: "inr",
+                product_data: {
+                    name: "Order 1",
+                },
+                unit_amount: order.fees * 100,
+            },
+            quantity: 1,
+        }
+
+        const session = await stripeInstance.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [lineItems], // Wrap the lineItems object in an array
+            mode: 'payment',
+            success_url: `${process.env.CLIENT_URL}/order/success`,
+            cancel_url: `${process.env.CLIENT_URL}/order/cancel`,
+        });
+
         console.log("Updating current order to 'completed'...");
         const updatedOrder = await OrderModel.findByIdAndUpdate(req.params.id, { status: 'completed' }, { new: true });
 

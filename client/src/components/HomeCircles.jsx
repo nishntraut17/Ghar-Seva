@@ -3,7 +3,7 @@ import CountUp from "react-countup";
 
 const HomeCircles = () => {
     return (
-        <section className="flex flex-row gap-20 justify-center">
+        <section className="flex flex-col md:flex-row gap-20 justify-center px-28 md:px-0">
             <div className="z-10 rounded-full shadow-lg p-12">
                 <CountUp
                     start={0}

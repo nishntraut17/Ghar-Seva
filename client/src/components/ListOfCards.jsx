@@ -26,15 +26,16 @@ const ListOfCards = () => {
     if (loading) {
         return <p>loading...</p>
     }
+    console.log(services[0]);
 
     return (
-        <div className='m-20'>
+        <div className='m-4 md:m-20'>
             <div className='text-4xl font-bold text-gray-800 text-left my-20'>
                 Our best services....
             </div>
-            <div className='flex flex-row gap-10'>
+            <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
                 {services.map((item, index) => (
-                    <Card image={item.images[0]} name={item.name} id={item._id} key={index} />
+                    <Card image={item.image} name={item.name} id={item._id} key={index} />
                 ))}
             </div>
         </div>

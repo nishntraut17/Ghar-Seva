@@ -74,7 +74,7 @@ const ProvideAService = () => {
                     >
                         <div>
                             <div className='h-32 w-32'>
-                                <img src={service.images[0]} alt="service" />
+                                <img src={service.image} alt="service" />
                             </div>
                             <span>{service.name}</span>
                         </div>

@@ -153,7 +153,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
         const user = await User.findById(req.params.id)
             .populate({
                 path: 'services',
-                select: ['name', 'images']
+                select: ['name', 'image']
             })
             .populate({
                 path: 'testimonials',

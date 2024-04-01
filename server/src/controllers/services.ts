@@ -39,11 +39,13 @@ export const deleteService = async (req: Request, res: Response): Promise<void> 
 
 export const addService = async (req: Request, res: Response): Promise<void> => {
     try {
+        console.log(req.body);
         const result = new ServiceModel(req.body);
         await result.save();
         console.log(result);
         res.send(result);
     } catch (error) {
+        console.log(error);
         res.send(error);
     }
 };
