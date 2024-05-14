@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import auth from "../middleware/auth";
 import { Request, Response } from 'express';
-import { createOrder, getServiceProviderOrder, getUserOrder, cancelOrder, serviceProviderAccepts, completeOrder, getAllOrdersByGroupId } from '../controllers/orders';
+import { createOrder, getServiceProviderOrder, getUserOrder, cancelOrder, serviceProviderAccepts, completeOrder, getAllOrdersByGroupId, totalEarnings } from '../controllers/orders';
 
 const orderRouter: Router = express.Router();
 
@@ -12,5 +12,6 @@ orderRouter.get('/user', auth, (req: Request, res: Response) => getUserOrder(req
 orderRouter.put('/cancel/:id', auth, (req: Request, res: Response) => cancelOrder(req, res));
 orderRouter.put('/service-provider-accept/:id', auth, (req: Request, res: Response) => serviceProviderAccepts(req, res));
 orderRouter.put('/complete/:id', auth, (req: Request, res: Response) => completeOrder(req, res));
+orderRouter.get('/total-earning/:id', auth, (req: Request, res: Response) => totalEarnings(req, res));
 
 export default orderRouter;

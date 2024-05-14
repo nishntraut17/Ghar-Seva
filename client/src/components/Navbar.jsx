@@ -7,38 +7,24 @@ import Logo from '../assets/logo.png';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { selectCurrentUser } from "../redux/reducers/authSlice";
 import { useSelector } from "react-redux";
-// import toast from 'react-hot-toast';
-import { Alert } from '@mui/material';
-
 
 const Header = () => {
     const [isCollapsed, setIsCollapsed] = useState(true);
-    const [showAlert, setShowAlert] = useState(false);
     const token = localStorage.getItem("token");
     const user = useSelector(selectCurrentUser);
-    const handleClick = () => {
-        setShowAlert(true);
-        setTimeout(() => {
-            setShowAlert(false);
-        }, 2000);
-    };
 
     return (
         <>
-            {showAlert && <Alert className="text-center">
-                You can view service providers of {user.city} city
-            </Alert>}
-
             <header className="shadow-sm sticky top-0 backdrop-blur-sm bg-[#fffefc80] z-20 px-12">
                 <div className="box flex justify-between items-center py-3">
                     <NavLink to='/'>
                         <img src={Logo} alt="logo" className="h-14 w-22" />
                     </NavLink>
-                    <button onClick={handleClick} className="flex text-gray-600 font-bold text-sm gap-2">
+                    <button className="flex text-gray-600 font-bold text-sm gap-2">
                         <LocationOnIcon />
                         <span>{user.city}</span>
                     </button>
-                    {/* Desktop navbar */}
+
                     <nav className="hidden md:block">
                         {/* Navbar links */}
                         <ul className="flex gap-10">
@@ -57,6 +43,16 @@ const Header = () => {
                                         className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
                                     >
                                         All Services
+                                    </NavLink>
+                                </li>
+                            )}
+                            {token && user?.role === 'consumer' && (
+                                <li>
+                                    <NavLink
+                                        to={"/user-orders"}
+                                        className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
+                                    >
+                                        Order
                                     </NavLink>
                                 </li>
                             )}

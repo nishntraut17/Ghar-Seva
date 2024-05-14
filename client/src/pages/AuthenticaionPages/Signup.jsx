@@ -284,7 +284,7 @@ export default function Signup() {
                         Already a user?{" "}
                         <NavLink
                             className=""
-                            to={"/login"}
+                            to={"/auth/login"}
                         >
                             Login
                         </NavLink>

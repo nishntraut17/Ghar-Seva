@@ -115,22 +115,6 @@ const Avatar = () => {
                         <Divider />
                     </Box>
                 )}
-                <MenuItem>
-                    <Link to="/notifications">
-                        <ListItemIcon>
-                            <Notifications fontSize="small" />
-                        </ListItemIcon>
-                        Notifications
-                    </Link>
-                </MenuItem>
-                <MenuItem>
-                    <Link to="/user-orders">
-                        <ListItemIcon>
-                            <FaFirstOrder fontSize="small" />
-                        </ListItemIcon>
-                        Orders
-                    </Link>
-                </MenuItem>
 
                 <MenuItem onClick={handleLogout}>
                     <ListItemIcon>

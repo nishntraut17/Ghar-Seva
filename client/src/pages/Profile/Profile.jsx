@@ -32,7 +32,7 @@ const Profile = () => {
         return <p>loading...</p>
     }
     return (
-        <div className="flex flex-col gap-16 items-center">
+        <div className="flex flex-col gap-16 items-center pb-10">
             <div className="flex flex-col md:flex-row gap-8 items-center justify-center">
                 <div className="flex flex-col text-2xl text-gray-700 gap-4 mt-16">
                     <div className='flex flex-row gap-4'>

@@ -24,6 +24,30 @@ export const getService = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
+export const serviceNotInUser = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const user = await UserModel.findById(req.params.id).populate('services');
+        if (!user) {
+            res.status(400).send("User not found");
+            return;
+        }
+
+        if (!user.services) {
+            res.send("User has no services");
+            return;
+        }
+
+        const servicesNotInUser = await ServiceModel.find({
+            _id: { $nin: user.services.map(service => service._id) }
+        });
+
+        res.send(servicesNotInUser);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 export const deleteService = async (req: Request, res: Response): Promise<void> => {
     try {
         const service = await ServiceModel.findByIdAndDelete(req.params.id);
@@ -96,5 +120,20 @@ export const addUserToService = async (req: Request, res: Response): Promise<voi
         res.status(500).send('Internal Server Error');
     }
 };
+
+export const serviceOfferedByServiceProvider = async (req: Request, res: Response) => {
+    try {
+        const user = req.params.id;
+        const userServices = await UserModel.findById(user).populate('services', ['name']);
+        if (!userServices) {
+            res.status(400).send("User not found");
+            return;
+        }
+        res.send(userServices);
+    } catch (error) {
+        console.log(error);
+        res.send(error);
+    }
+}
 
 export default { getAllServices, getService, addService, deleteService, addUserToService };

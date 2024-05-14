@@ -84,7 +84,7 @@ export const getServiceProviderOrder = async (req: AuthRequest, res: Response): 
         const user = req.user._id;
         const orders = await OrderModel.find({ serviceProvider: user })
             .populate('user', ['name', 'email', 'profileImage'])
-            .populate('service', ['name']);
+            .populate('service', ['name', 'subServices']);
         res.send(orders);
     } catch (error) {
         console.error(error);
@@ -97,7 +97,7 @@ export const getAllOrdersByGroupId = async (req: Request, res: Response): Promis
         const groupId = req.params.id;
         const orders = await OrderModel.find({ groupId: groupId })
             .populate('serviceProvider', ['name', 'email', 'profileImage'])
-            .populate('service', ['name']);
+            .populate('service', ['name', 'subServices']);
         res.send(orders);
     } catch (error) {
         console.error(error);
@@ -119,11 +119,12 @@ export const cancelOrder = async (req: Request, res: Response): Promise<void> =>
 
 export const completeOrder = async (req: Request, res: Response): Promise<void> => {
     try {
+        const fees = req.body.fees;
         const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY as string);
         const order = await OrderModel.findById(req.params.id);
 
         if (!order) {
-            res.status(404).send("No such order found.");
+            res.status(404).json({ error: "No such order found." });
             return;
         }
 
@@ -133,24 +134,16 @@ export const completeOrder = async (req: Request, res: Response): Promise<void> 
                 product_data: {
                     name: "Order 1",
                 },
-                unit_amount: order.fees * 100,
+                unit_amount: fees * 100,
             },
             quantity: 1,
-        }
-
-        const session = await stripeInstance.checkout.sessions.create({
-            payment_method_types: ['card'],
-            line_items: [lineItems], // Wrap the lineItems object in an array
-            mode: 'payment',
-            success_url: `${process.env.CLIENT_URL}/order/success`,
-            cancel_url: `${process.env.CLIENT_URL}/order/cancel`,
-        });
+        };
 
         console.log("Updating current order to 'completed'...");
         const updatedOrder = await OrderModel.findByIdAndUpdate(req.params.id, { status: 'completed' }, { new: true });
 
         if (!updatedOrder) {
-            res.status(404).send("No such order found.");
+            res.status(404).json({ error: "No such order found." });
             return;
         }
 
@@ -165,13 +158,22 @@ export const completeOrder = async (req: Request, res: Response): Promise<void> 
             }
         }));
 
-        console.log("All orders in the group updated successfully.");
-        res.send(updatedOrder);
-    } catch (error) {
+        const session = await stripeInstance.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [lineItems], // Wrap the lineItems object in an array
+            mode: 'payment',
+            success_url: `${process.env.CLIENT_URL}/order/success`,
+            cancel_url: `${process.env.CLIENT_URL}/order/cancel`,
+        });
+        console.log(session);
+
+        res.json({ url: session.url });
+    } catch (error: any) {
         console.error("Error occurred:", error);
-        res.status(500).send(error);
+        res.status(500).json({ error: error.message });
     }
 };
+
 
 export const getUserOrder = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
@@ -204,3 +206,22 @@ export const serviceProviderAccepts = async (req: Request, res: Response): Promi
         res.status(500).send(error);
     }
 };
+
+export const totalEarnings = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const orders = await OrderModel.find({ serviceProvider: req.params.id, status: 'completed' });
+        console.log("Orders:", orders);
+
+        const totalEarnings = orders.reduce((acc, order) => {
+            console.log("Accumulated Earnings:", acc);
+            console.log("Order Fees:", order.fees);
+            return acc + order.fees;
+        }, 0);
+
+        console.log("Total Earnings:", totalEarnings);
+        res.send({ totalEarnings });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+}

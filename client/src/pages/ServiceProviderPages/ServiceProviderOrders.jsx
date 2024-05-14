@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from "react-hot-toast";
-import Fee from '../components/Fee';
+import Fee from '../../components/Fee';
 
 const ServiceProviderOrders = () => {
     const [orders, setOrders] = useState([]);
@@ -89,44 +89,70 @@ const ServiceProviderOrders = () => {
 
     return (
         <div className="flex">
-            <div className="bg-gray-200 p-4 h-screen w-1/6">
+            <div className="bg-gray-200 p-4 min-h-screen w-1/6">
                 {loading && <div>Loading...</div>}
                 {!loading && (
-                    <div className='mt-10 flex flex-col'>
+                    <div className='mt-10 flex  min-h-screen flex-col'>
                         <button onClick={() => setActive('new')} className={`mr-2 mb-2 px-4 py-2 rounded ${activeButton === 'new' ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}`}>New Orders</button>
                         <button onClick={() => setActive('completed')} className={`mr-2 mb-2 px-4 py-2 rounded ${activeButton === 'completed' ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}`}>Completed Orders</button>
                         <button onClick={() => setActive('cancelled')} className={`mr-2 mb-2 px-4 py-2 rounded ${activeButton === 'cancelled' ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}`}>Cancelled Orders</button>
                     </div>
                 )}
             </div>
-            <div className="w-5/6 p-4 h-screen">
+            <div className="w-5/6 p-4 min-h-screen">
                 {!loading && activeButton === 'new' &&
-                    newOrders?.map((order, i) => (
-                        <div key={order._id} className='mt-10 flex gap-10 hover:cursor-pointer items-center justify-center'>
-                            <img src={order.user.profileImage} alt="profile" className='h-20 w-20 rounded' />
-                            <p className='text-left ml-2'>{order.status}</p>
-                            <p className='text-left ml-2'>{order.service.name}</p>
-                            <p className='text-left ml-2'>{order.user.name}</p>
-                            <p className='text-left ml-2'>{order.user.email}</p>
-                            <button onClick={() => handleRejectOrAccept(order, "cancelled", 1)} className="bg-red-400 h-10 w-20 rounded hover:bg-red-500">Cancel</button>
-                            <button onClick={() => setModelOpen(true)} className="bg-red-400 h-10 w-20 rounded hover:bg-red-500">Accept & Enter Fees</button>
-
+                    newOrders.length > 0 && newOrders?.map((order, i) => (
+                        <span key={order._id} className='mt-10 flex flex-row gap-10 hover:cursor-pointer items-center  py-4 justify-center bg-slate-50 rounded-sm border'>
+                            <div className='flex flex-col gap-2 justify-center items-center'>
+                                <div>
+                                    <img src={order.user.profileImage} alt="profile" className='h-20 w-20 rounded' />
+                                </div>
+                                <p className='text-left ml-2'>{order.user.name}</p>
+                            </div>
+                            <div>
+                                <p className=''>Requested Services:</p>
+                                <div className='bg-slate-100 p-4 rounded-sm'>
+                                    {
+                                        order?.service?.subServices?.map((subservice, i) => (
+                                            <p key={i} className='text-left ml-2'>{subservice}</p>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                            <div className='flex flex-row gap-8'>
+                                <button onClick={() => handleRejectOrAccept(order, "cancelled", 1)} className="bg-red-400 h-10 w-20 rounded hover:bg-red-500">Cancel</button>
+                                <button onClick={() => setModelOpen(true)} className="bg-blue-400 h-10 w-20 rounded hover:bg-blue-500 text-sm">Accept & Enter Fees</button>
+                            </div>
                             {modelOpen && (
                                 <Fee
                                     order={order} setModelOpen={setModelOpen} fetchData={fetchData}
                                 />)
                             }
-                        </div>
+                        </span>
                     ))
+
                 }
                 {!loading && activeButton === 'completed' &&
                     completedOrders?.map((order, i) => (
-                        <div key={order._id} className='mt-10 flex gap-10 hover:cursor-pointer items-center justify-center'>
-                            <img src={order.user.profileImage} alt="profile" className='h-20 w-20 rounded' />
-                            <p className='text-left ml-2'>{order.status}</p>
-                            <p className='text-left ml-2'>{order.service.name}</p>
-                            <p className='text-left ml-2'>{order.user.name}</p>
-                            <p className='text-left ml-2'>{order.user.email}</p>
+                        <div key={order._id} className='mt-10 flex flex-row gap-10 hover:cursor-pointer items-center justify-center'>
+                            <div className='flex flex-row gap-8'>
+                                <div>
+                                    <img src={order.user.profileImage} alt="profile" className='h-20 w-20 rounded' />
+                                </div>
+                                <div>
+                                    <p className='text-left ml-2'>{order.user.name}</p>
+                                    <p className='text-left ml-2'>{order.user.email}</p>
+                                </div>
+                            </div>
+                            <div className='flex flex-row gap-8'>
+                                <div className='bg-slate-100 p-4 rounded-sm'>
+                                    {
+                                        order?.service?.subServices?.map((subservice, i) => (
+                                            <p key={i} className='text-left ml-2'>{subservice}</p>
+                                        ))
+                                    }
+                                </div>
+                            </div>
                         </div>
                     ))
                 }

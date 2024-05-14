@@ -18,7 +18,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
 
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, email, mobile, address, city, password, profileImage } = req.body;
+        const { name, email, role, mobile, address, city, password, profileImage } = req.body;
         const user = await User.findOne({ email });
         if (user) {
             res.status(400).json({ message: "User already exists with this email" });
@@ -28,6 +28,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             const emailToken = crypto.randomBytes(64).toString('hex');
             const newUser = new User({
                 name,
+                role,
                 email,
                 mobile,
                 address,
@@ -242,6 +243,30 @@ export const rateAndReviewUser = async (req: Request, res: Response): Promise<vo
 
         res.status(201).json({ message: "Rating and Review added successfully." });
 
+    } catch (error) {
+        console.log(error);
+        res.send(error);
+    }
+};
+
+export const viewTestimonials = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const serviceProvider = await User.findById(req.params.id)
+            .populate({
+                path: 'testimonials',
+                populate: {
+                    path: 'customer',
+                    select: ['name', 'profileImage']
+                }
+            })
+            .select('testimonials');
+
+        if (!serviceProvider) {
+            res.status(404).json({ error: "User not found." });
+            return;
+        }
+
+        res.send(serviceProvider.testimonials);
     } catch (error) {
         console.log(error);
         res.send(error);

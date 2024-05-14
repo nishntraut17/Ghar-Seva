@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { setUserInfo } from "../redux/reducers/authSlice";
+import { setUserInfo } from "../../redux/reducers/authSlice";
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 

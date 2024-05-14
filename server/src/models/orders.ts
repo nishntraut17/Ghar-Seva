@@ -17,7 +17,7 @@ const orderSchema: Schema<IOrder> = new Schema({
     status: { type: String, default: 'user requests' },
     groupId: { type: String, required: true, unique: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    serviceProvider: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceProvider', required: true },
+    serviceProvider: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: true },
     date: { type: String, required: true },
     time: { type: String, required: true },

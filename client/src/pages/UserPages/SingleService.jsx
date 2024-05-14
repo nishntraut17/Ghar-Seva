@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import BookService from '../components/BookService';
+import BookService from '../../components/BookService';
 import { jwtDecode } from 'jwt-decode';
-import QS from '../assets/QS2.png';
+import QS from '../../assets/QS2.png';
 import HelpIcon from '@mui/icons-material/Help';
 import CloseIcon from '@mui/icons-material/Close';
 

@@ -35,20 +35,17 @@ const UserOrders = () => {
                 {loading && <div>Loading...</div>}
             </div>
             <div className="my-12 flex flex-col justify-center items-center">
-                <div className='text-2xl font-bold text-left'>All Orders</div>
-                {Object.keys(groupedOrders).map(groupId => (
-                    <div key={groupId} className='border-2 m-4 rounded-md'>
-                        <div className='flex flex-row gap-6 p-4 text-gray-700'>
-                            <div className='flex flex-row gap-4'>
+                {Object.keys(groupedOrders).reverse().map(groupId => (
+                    <div key={groupId} className="border-2 m-4 rounded-md">
+                        <div className="flex flex-row gap-6 p-4 text-gray-700">
+                            <div className="flex flex-row gap-4">
                                 <h3 className="text-lg font-bold text-left flex items-center">{groupedOrders[groupId][0].service.name}</h3>
-                                <h3 className="text-sm font-bold text-left flex items-center">Request ID: {groupId}</h3>
                                 <h3 className="text-sm font-bold text-left flex items-center"><EventIcon /> {groupedOrders[groupId][0].date}</h3>
                                 <h3 className="text-sm font-bold text-left flex items-center"><AccessTimeIcon /> {groupedOrders[groupId][0].time}</h3>
-
                             </div>
-                            {/* <button onClick={() => setActive('cancelled')} className={` flex rounded p-10 ${activeButton === 'cancelled' ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"}`}>Cancel Order</button> */}
-                            <NavLink to={`/order/${groupId}`} className='flex items-center'>
-                                <button className='text-sm bg-slate-100 rounded-lg p-2 border-2 border-slate-300 hover:bg-slate-200'> View more <ReadMoreIcon /></button>
+
+                            <NavLink to={`/order/${groupId}`} className="flex items-center">
+                                <button className="text-sm bg-slate-100 rounded-lg p-2 border-2 border-slate-300 hover:bg-slate-200"> <ReadMoreIcon /></button>
                             </NavLink>
                         </div>
                     </div>
@@ -56,6 +53,7 @@ const UserOrders = () => {
             </div>
         </div>
     );
+
 };
 
 export default UserOrders;

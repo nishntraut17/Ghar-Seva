@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Image } from '@mui/icons-material';
-import { setUserInfo, selectCurrentUser } from '../redux/reducers/authSlice';
+import { setUserInfo, selectCurrentUser } from '../../redux/reducers/authSlice';
 
 const UpdateProfile = () => {
     const { id } = useParams();
@@ -67,7 +67,7 @@ const UpdateProfile = () => {
             if (loading) return;
             if (file === "") return;
 
-            const { name, email, password, address, mobile } = info;
+            const { name, email, password, address, mobile, city } = info;
             if (!email || !password || !name) {
                 return toast.error("Input field should not be empty");
             } else if (password.length < 5) {
@@ -76,7 +76,7 @@ const UpdateProfile = () => {
 
             await toast.promise(
                 axios.put(`http://localhost:5000/api/user/${id}`, {
-                    name, email, password, address, mobile, profileImage: file
+                    city, name, email, password, address, mobile, profileImage: file
                 }, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem('token')}`
@@ -88,7 +88,7 @@ const UpdateProfile = () => {
                     loading: "updating user details...",
                 }
             );
-            dispatch(setUserInfo({ _id: id, name: info.name, email: info.email, profileImage: file, role: user.role }));
+            dispatch(setUserInfo({ _id: id, name: info.name, email: info.email, profileImage: file, role: user.role, city: info.city }));
             return navigate(`/profile/${id}`);
         } catch (error) {
             console.log('Error', error);
@@ -104,7 +104,7 @@ const UpdateProfile = () => {
     }
 
     return (
-        <div className="flex flex-col items-center text-gray-700">
+        <div className="flex flex-col items-center text-gray-700 pb-10">
             <h1 className="text-3xl font-bold my-6 text-center">Update Profile</h1>
             <form onSubmit={formSubmit} className="flex flex-col items-center gap-4">
                 <div>

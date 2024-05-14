@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Card from "../components/Card"
+import Card from "../../components/Card"
 
 const AllServices = () => {
     const [services, setServices] = useState([]);
@@ -39,10 +39,9 @@ const AllServices = () => {
     }
 
     return (
-        <div className="">
-            <div className="">
-                <h2 className="text-2xl font-bold tracking-tight text-gray-900 py-4">All services</h2>
-                <div className='flex flex-col items-center gap-8 justify-center'>
+        <div className="py-10 min-h-svh">
+            <div className="p-10 flex flex-col gap-10">
+                <div className='flex flex-col gap-8 justify-center'>
                     <div className="rounded-xl w-96">
                         <input
                             type="text"
@@ -55,7 +54,7 @@ const AllServices = () => {
                 </div>
 
 
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8 m-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
                     {filteredData.length ? filteredData.map((service, id) => (
                         <Link to={`/service/${service._id}`} id={id} key={id}>
                             <Card name={service.name} image={service.image} id={service._id} description={service.description} />

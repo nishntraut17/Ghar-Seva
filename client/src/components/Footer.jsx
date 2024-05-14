@@ -5,13 +5,12 @@ import {
     AiFillTwitterCircle,
 } from "react-icons/ai";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import Logo from '../assets/logo.png';
 
 
 const Footer = () => {
     return (
-        <footer className="border-b-4 border-primary bg-gray-50 pt-12 mt-24 px-4">
+        <footer className="border-b-4 border-primary bg-gray-50 pt-12 px-4">
             {/* Footer top */}
             <div className="box flex flex-col md:flex-row  justify-between border-b-2 border-gray-100 pb-10 gap-8">
                 {/* Footer top left */}
@@ -22,52 +21,50 @@ const Footer = () => {
                         Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     </p>
                 </div>
-                {/* Footer top right */}
                 <div className="flex gap-10 basis-1/2 justify-center md:justify-end flex-wrap md:flex-nowrap">
-                    {/* Footer links */}
                     <ul className="flex flex-col gap-2 font-semibold mx-8 items-center md:items-start">
                         <li className="text-gray-700 text-sm text-bold mb-2">Services</li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>House Hold</Link>
+                            <p>House Hold</p>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link to='/blog'>Plumbing</Link>
+                            <p>Plumbing</p>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link to='recipe'>Electrician</Link>
+                            <p>Electrician</p>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>Carpenter</Link>
+                            <p>Carpenter</p>
                         </motion.li>
                     </ul>
                     <ul className="flex flex-col gap-2 font-semibold mx-8 items-center md:items-start">
                         <li className="text-gray-700 text-sm text-bold mb-2">Company</li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>About</Link>
+                            <p>About</p>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>Careers</Link>
+                            <p>Careers</p>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>News</Link>
+                            <p>News</p>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>Newsletter</Link>
+                            <p>Newsletter</p>
                         </motion.li>
                     </ul>
                     <ul className="flex flex-col gap-2 font-semibold mx-8 items-center md:items-start">
                         <li className="text-gray-700 text-sm text-bold mb-2">Legal</li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>Terms</Link>
+                            <p>Terms</p>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>Privacy</Link>
+                            <p>Privacy</p>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>Licenses</Link>
+                            <p>Licenses</p>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>Cookies</Link>
+                            <p>Cookies</p>
                         </motion.li>
                     </ul>
                 </div>
