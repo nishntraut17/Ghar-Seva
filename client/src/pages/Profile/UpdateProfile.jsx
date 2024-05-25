@@ -19,7 +19,7 @@ const UpdateProfile = () => {
         setLoading(true);
         const getUser = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:5000/api/user/${id}`, {
+                const { data } = await axios.get(`${process.env.SERVER_BASE_URL}/user/${id}`, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
                     }

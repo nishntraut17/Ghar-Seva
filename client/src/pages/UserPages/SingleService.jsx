@@ -22,7 +22,7 @@ const SingleService = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get(`http://localhost:5000/api/service/${id}`);
+                const response = await axios.get(`${process.env.SERVER_BASE_URL}/service/${id}`);
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }

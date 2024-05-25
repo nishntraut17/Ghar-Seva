@@ -19,7 +19,7 @@ const Fee = ({ setModelOpen, order, fetchData }) => {
         try {
             await toast.promise(
                 axios.put(
-                    `http://localhost:5000/api/order/service-provider-accept/${order._id}`,
+                    `${process.env.SERVER_BASE_URL}/order/service-provider-accept/${order._id}`,
                     {
                         status: 'service-provider-accepted', fees: fee
                     },

@@ -28,7 +28,7 @@ const RateReview = ({ setModelOpen, order, serviceProvider, fetchData }) => {
         try {
             await toast.promise(
                 axios.put(
-                    `http://localhost:5000/api/user/rate-review/${serviceProvider}`,
+                    `${process.env.SERVER_BASE_URL}/user/rate-review/${serviceProvider}`,
                     {
                         rating: formDetails.rating,
                         review: formDetails.review,

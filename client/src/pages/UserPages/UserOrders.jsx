@@ -13,7 +13,7 @@ const UserOrders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/order/user/`, {
+                const response = await axios.get(`${process.env.SERVER_BASE_URL}/order/user/`, {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem("token")}`,
                     },

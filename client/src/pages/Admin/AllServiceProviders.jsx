@@ -20,7 +20,7 @@ const AllServiceProviders = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get('http://localhost:5000/api/user/');
+                const response = await axios.get(`${process.env.SERVER_BASE_URL}/user/`);
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }

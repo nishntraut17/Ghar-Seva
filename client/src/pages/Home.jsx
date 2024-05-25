@@ -26,7 +26,7 @@ const Home = () => {
     useEffect(() => {
         const getEarnings = async () => {
             if (user.role === 'service_provider') {
-                const response = await axios.get(`http://localhost:5000/api/order/total-earning/${user._id}`, {
+                const response = await axios.get(`${process.env.SERVER_BASE_URL}/order/total-earning/${user._id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -39,7 +39,7 @@ const Home = () => {
 
         const getServices = async () => {
             if (user.role === 'service_provider') {
-                const response = await axios.get(`http://localhost:5000/api/service/service-provided/${user._id}`, {
+                const response = await axios.get(`${process.env.SERVER_BASE_URL}/service/service-provided/${user._id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -51,7 +51,7 @@ const Home = () => {
 
         const getTestimonials = async () => {
             if (user.role === 'service_provider') {
-                const response = await axios.get(`http://localhost:5000/api/user/testimonials/${user._id}`, {
+                const response = await axios.get(`${process.env.SERVER_BASE_URL}/user/testimonials/${user._id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

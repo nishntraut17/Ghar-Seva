@@ -31,7 +31,7 @@ const BookService = ({ setModalOpen, service, subServices, cityServiceProviders 
         try {
             await toast.promise(
                 axios.post(
-                    "http://localhost:5000/api/order/",
+                    `${process.env.SERVER_BASE_URL}/order/`,
                     {
                         date: formDetails.date,
                         time: formDetails.time,

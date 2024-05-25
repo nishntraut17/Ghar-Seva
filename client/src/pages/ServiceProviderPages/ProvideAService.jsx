@@ -15,7 +15,7 @@ const ProvideAService = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get(`http://localhost:5000/api/service/not-in-user/${user?._id}`, {
+                const response = await axios.get(`${process.env.SERVER_BASE_URL}/service/not-in-user/${user?._id}`, {
                     headers: {
                         "Authorization": `Bearer ${localStorage.getItem('token')}`,
                     },

@@ -62,7 +62,7 @@ export default function Signup() {
             }
 
             await toast.promise(
-                axios.post("http://localhost:5000/api/user/register", {
+                axios.post(`${process.env.SERVER_BASE_URL}/user/register`, {
                     name, email, password, city, address, role, mobile, profileImage: file
                 }),
                 {
